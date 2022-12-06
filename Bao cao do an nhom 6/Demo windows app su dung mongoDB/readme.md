@@ -59,6 +59,9 @@ VD: Thống kê top 6 nhà hàng có điểm trung bình cao nhất thành phố
 ![image](https://user-images.githubusercontent.com/118526250/205499378-8566733f-965e-4dd3-a974-b5b4f8ecccc0.png)
 
 
++ Hiển thị các thống kê các nhà hàng trong toàn CSDL hay từng thành phố theo các tiêu chí như: Có nhiều đánh giá A nhất, nhiều đánh giá C nhất, điểm trung bình cao nhất dưới dạng biểu đồ
+- VD: Hiển thị thống kê top 6 nhà hàng có điểm trung bình cao nhất thành phố “Bronx” dưới dạng biểu đồ
+![image](https://user-images.githubusercontent.com/118526250/205848086-bf8d5ccb-7725-474d-92f2-dda88fcb0f21.png)
 
 
 
