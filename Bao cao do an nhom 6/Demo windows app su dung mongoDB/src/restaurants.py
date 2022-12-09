@@ -10,6 +10,7 @@ from _ast import If
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 class Restaurants:
     
     
@@ -50,6 +51,7 @@ class Restaurants:
         print(my_query)
         data=self.create_data(my_query)
         self.query_database(data)
+        self.count_label.configure(text=f"COUNT: {len(data)}",fg='red',font=( 25))
     def timkiem_name(self,query):   
         # my_query=""
         my_query = { "name": { "$regex": f"{query}" ,"$options": 'i'} }
@@ -57,6 +59,7 @@ class Restaurants:
         print(my_query)
         data=self.create_data(my_query)
         self.query_database(data)
+        self.count_label.configure(text=f"COUNT: {len(data)}",fg='red',font=( 25))
     def timkiem_cuisine(self,query):   
         # my_query=""
         my_query = { "cuisine": { "$regex": f"{query}" ,"$options": 'i'} }
@@ -64,7 +67,7 @@ class Restaurants:
         print(my_query)
         data=self.create_data(my_query)
         self.query_database(data)
-        
+        self.count_label.configure(text=f"COUNT: {len(data)}",fg='red',font=( 25))
         
     def timkiem_borough(self,query):   
         # my_query=""
@@ -73,7 +76,8 @@ class Restaurants:
         print(my_query)
         data=self.create_data(my_query)
         self.query_database(data)
-    
+        self.count_label.configure(text=f"COUNT: {len(data)}",fg='red',font=( 25))
+        
     def add_record(self):
         kt=1
         mydoc = self.mycol.find()
@@ -96,14 +100,15 @@ class Restaurants:
     
                     
                     messagebox.showinfo("info", "Them thanh cong")
-                    # self.edit.quit()
-                    # self.restaurant_id_entry.delete(0, END)
-                    # self.name_entry.delete(0, END)
-                    # self.borough_entry.delete(0, END)
-                    # self.cuisine_entry.delete(0, END)
-                    # self.street_entry.delete(0, END)
-                    # self.building_entry.delete(0, END)
-                    # self.zipcode_entry.delete(0, END)
+                    
+                    self.restaurant_id_entry.delete(0, END)
+                    self.name_entry.delete(0, END)
+                    self.borough_entry.delete(0, END)
+                    self.cuisine_entry.delete(0, END)
+                    self.street_entry.delete(0, END)
+                    self.building_entry.delete(0, END)
+                    self.zipcode_entry.delete(0, END)
+                    
                         
             else:
                 messagebox.showwarning("warning", "Dien day du thong tin")    
@@ -141,8 +146,9 @@ class Restaurants:
         self.myquery = { "restaurant_id": values[0]   }
         a=self.mycol.delete_one(self.myquery)
         messagebox.showinfo("info", "xoa thanh cong")
-       
+        
         self.my_tree.delete(selected)
+        
     def total_grade(self,key,grade):
         
         myquery= {"restaurant_id":key}
@@ -245,30 +251,32 @@ class Restaurants:
         
         mydoc = self.mycol.find(query)
         for item in mydoc:
-            
-            a=item["address"]
-            Danhgia= item["grades"]
-            total_A =0
-            for DanhgiaA in Danhgia:
-                if DanhgiaA["grade"] == "A":
-                    total_A+=1
-            total_B =0
-            for DanhgiaB in Danhgia:
-                if DanhgiaB["grade"] == "B":
-                    total_B+=1
-                       
-            total_C =0
-            for DanhgiaC in Danhgia:
-                if DanhgiaC["grade"] == "C":
-                    total_C+=1
-            avg =0
-            total_score=0
-            i=0
-            for avg_score in Danhgia:
-                total_score += avg_score["score"]
-                i+=1    
-            avg=total_score/i   
-            data.append((item["restaurant_id"],item["name"],item["cuisine"],item["borough"],a["street"],a["building"],a["zipcode"],total_A,total_B,total_C,avg))
+            try:
+                a=item["address"]
+                Danhgia= item["grades"]
+                total_A =0
+                for DanhgiaA in Danhgia:
+                    if DanhgiaA["grade"] == "A":
+                        total_A+=1
+                total_B =0
+                for DanhgiaB in Danhgia:
+                    if DanhgiaB["grade"] == "B":
+                        total_B+=1
+                           
+                total_C =0
+                for DanhgiaC in Danhgia:
+                    if DanhgiaC["grade"] == "C":
+                        total_C+=1
+                avg =0
+                total_score=0
+                i=0
+                for avg_score in Danhgia:
+                    total_score += avg_score["score"]
+                    i+=1    
+                avg=total_score/i   
+                data.append((item["restaurant_id"],item["name"],item["cuisine"],item["borough"],a["street"],a["building"],a["zipcode"],total_A,total_B,total_C,avg))
+            except:
+                data.append((item["restaurant_id"],item["name"],item["cuisine"],item["borough"],a["street"],a["building"],a["zipcode"],0,0,0,0))
         return data      
     def query_database(self,data):
         
@@ -294,6 +302,7 @@ class Restaurants:
         query={}
         data=self.create_data(query)
         self.query_database(data)
+        self.count_label.configure(text=f"COUNT: {len(data)}",fg='red',font=( 25))
     def bubble_sort(self,data,nums):  
     # We set swapped to True so the loop looks runs at least once
         swapped = True
@@ -529,9 +538,13 @@ class Restaurants:
         self.my_tree.heading("avg", text="Avg score", anchor=W)
         
         query={}
-        data=self.create_data(query)
-        self.query_database(data)
+        self.data=self.create_data(query)
+        self.query_database(self.data)
         
+        self.count_label = Label(tree_frame, text=f"COUNT: {len(self.data)}",fg='red',font=( 25))
+        self.count_label.pack(pady=10, anchor=NE)
+        
+    
         self.my_tree.bind("<ButtonRelease-1>",self.select)     
         data_frame = LabelFrame(self.tab, text="Record")
         data_frame.pack(fill="x", expand="yes", padx=20,pady=10)
